@@ -230,7 +230,7 @@ local function FormatUptime()
     return string.format("%02d:%02d:%02d", hours, minutes, seconds)
 end
 
---// Get Raw Gold Amount (from BoogaX)
+--// Get Raw Gold Amount (from Status)
 local cachedRawGold = 0
 local lastGoldCheck = 0
 
@@ -283,7 +283,7 @@ end
 
 --// Save/Load Settings
 local function SaveTelegramSettings()
-    local folderPath = "BoogaX"
+    local folderPath = "Status"
     local filePath = folderPath .. "/telegram.json"
     
     local allChatIds = {}
@@ -333,7 +333,7 @@ local function SaveTelegramSettings()
 end
 
 local function LoadTelegramSettings()
-    local folderPath = "BoogaX"
+    local folderPath = "Status"
     local filePath = folderPath .. "/telegram.json"
     
     pcall(function()
@@ -362,7 +362,7 @@ local function HandleTelegramCommand(message)
     local allChatIds = {}
     pcall(function()
         if readfile then
-            local content = readfile("BoogaX/telegram.json")
+            local content = readfile("Status/telegram.json")
             if content and content ~= "" then
                 local data = HttpService:JSONDecode(content)
                 allChatIds = data.chat_ids or {}
@@ -384,13 +384,13 @@ local function HandleTelegramCommand(message)
         table.insert(allChatIds, chatId)
         pcall(function()
             if readfile and writefile then
-                local content = readfile("BoogaX/telegram.json")
+                local content = readfile("Status/telegram.json")
                 local data = {}
                 if content and content ~= "" then
                     data = HttpService:JSONDecode(content) or {}
                 end
                 data.chat_ids = allChatIds
-                writefile("BoogaX/telegram.json", HttpService:JSONEncode(data))
+                writefile("Status/telegram.json", HttpService:JSONEncode(data))
             end
         end)
         isAuthorized = true
@@ -400,7 +400,7 @@ local function HandleTelegramCommand(message)
 
     if text == "/start" then
         local currentGold = GetRawGoldAmount()
-        local msg = "🎮 *BoogaX Dashboard*\n\n"
+        local msg = "🎮 *Status Dashboard*\n\n"
         msg = msg .. "👤 Player: " .. PLAYER_NAME .. "\n"
         msg = msg .. "💰 Raw Gold: " .. currentGold .. "\n"
         msg = msg .. "⏰ Uptime: " .. FormatUptime() .. "\n\n"
